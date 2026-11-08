@@ -2,7 +2,7 @@
  * USA IP Database - Upload Only
  */
 
-const API_URL = 'https://usa-ip-api.mshoaib-archnetix.workers.dev';
+const API_URL = 'https://training-ip-database.myahyakhan984.workers.dev/';
 
 class UploadIP {
     constructor() {
