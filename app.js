@@ -1,142 +1,64 @@
-/**
- * USA IP Database - Upload Only
- */
+async function checkAndUploadIP() {
+    const ipInput = document.getElementById('ipInput').value.trim();
+    const messageBox = document.getElementById('messageBox');
+    const btnText = document.getElementById('btnText');
+    const loader = document.getElementById('loader');
+    const uploadBtn = document.getElementById('uploadBtn');
 
-const API_URL = 'ipv4-duplicate-checker-api.myahyakhan984.workers.dev';
+    messageBox.style.display = 'none';
+    messageBox.className = 'message-box';
 
-class UploadIP {
-    constructor() {
-        console.log('✅ App Started');
-        console.log('📡 API:', API_URL);
-        this.attachListeners();
+    // Strict IPv4 Format Validation Filter (Sirf IP format allow hoga)
+    const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    if (!ipv4Regex.test(ipInput)) {
+        messageBox.style.display = 'block';
+        messageBox.classList.add('error');
+        messageBox.innerText = 'Invalid IP Format! Please enter a valid IPv4 address (e.g. 192.168.1.1)';
+        return;
     }
 
-    attachListeners() {
-        document.getElementById('uploadForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.uploadIP();
+    // UI Loading State On
+    btnText.style.display = 'none';
+    loader.style.display = 'inline-block';
+    uploadBtn.disabled = true;
+
+    try {
+        // Apne Cloudflare Worker ka URL yahan lagayein
+        const response = await fetch('https://YOUR_WORKER_SUBDOMAIN.workers.dev/api/ip', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ip: ipInput })
         });
-    }
 
-    // Automatically retry if browser connection fails
-    async fetchWithRetry(url, options, maxAttempts = 3) {
-        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-            try {
-                console.log(`📡 Request attempt: ${attempt}`);
+        const data = await response.json();
 
-                return await fetch(url, {
-                    ...options,
-                    cache: 'no-store'
-                });
+        messageBox.style.display = 'block';
 
-            } catch (error) {
-                console.error(`❌ Attempt ${attempt} failed:`, error);
-
-                if (attempt === maxAttempts) {
-                    throw error;
-                }
-
-                await new Promise(resolve =>
-                    setTimeout(resolve, attempt * 1000)
-                );
-            }
-        }
-    }
-
-    async uploadIP() {
-        const ipInput = document.getElementById('ipInput');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const notification = document.getElementById('uploadNotification');
-
-        const ip = ipInput.value.trim();
-
-        if (!ip) {
-            this.showNotification(
-                notification,
-                'error',
-                '❌ Please enter an IP address'
-            );
-            return;
+        if (response.status === 409 || data.duplicate) {
+            // Duplicate IP Message
+            messageBox.classList.add('error');
+            messageBox.innerText = 'Duplicate IP Please Create a new profile';
+        } else if (response.ok) {
+            // Success Message
+            messageBox.classList.add('success');
+            messageBox.innerText = 'Success! IP has been saved to the database.';
+            document.getElementById('ipInput').value = '';
+        } else {
+            messageBox.classList.add('error');
+            messageBox.innerText = data.error || 'Something went wrong. Please try again.';
         }
 
-        uploadBtn.disabled = true;
-
-        try {
-            console.log('📤 Uploading:', ip);
-
-            const response = await this.fetchWithRetry(
-                `${API_URL}/api/upload-ip`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ip_address: ip
-                    })
-                }
-            );
-
-            const data = await response.json();
-
-            console.log('📥 Response:', data);
-
-            if (data.success) {
-                this.showNotification(
-                    notification,
-                    'success',
-                    `✅ ${data.message}`
-                );
-
-                ipInput.value = '';
-                ipInput.focus();
-
-            } else if (data.status === 'duplicate') {
-                this.showNotification(
-                    notification,
-                    'error',
-                    `⚠️ ${data.message}`
-                );
-
-            } else if (data.status === 'invalid') {
-                this.showNotification(
-                    notification,
-                    'error',
-                    `❌ ${data.message}`
-                );
-
-            } else {
-                this.showNotification(
-                    notification,
-                    'error',
-                    `❌ ${data.message || 'Upload failed'}`
-                );
-            }
-
-        } catch (error) {
-            console.error('Final Upload Error:', error);
-
-            this.showNotification(
-                notification,
-                'error',
-                '❌ Connection failed after 3 attempts. Please try again.'
-            );
-
-        } finally {
-            uploadBtn.disabled = false;
-        }
-    }
-
-    showNotification(container, type, message) {
-        container.className = `notification show ${type}`;
-        container.textContent = message;
-
-        setTimeout(() => {
-            container.classList.remove('show');
-        }, 5000);
+    } catch (error) {
+        messageBox.style.display = 'block';
+        messageBox.classList.add('error');
+        messageBox.innerText = 'Network connection failed. Check your Worker URL.';
+    } finally {
+        // UI Loading State Off
+        btnText.style.display = 'inline-block';
+        loader.style.display = 'none';
+        uploadBtn.disabled = false;
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    new UploadIP();
-});
