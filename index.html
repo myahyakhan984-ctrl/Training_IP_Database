@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Registry & Duplicate Checker</title>
+    <title>Training - IP Registry Portal</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="card">
+            <div class="badge-training">Training Portal</div>
             <div class="icon-container">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
-            <h2>IP Management Portal</h2>
-            <p class="subtitle">Secure IPv4 Verification & Database Registry</p>
+            <h2>Upload Your IP</h2>
+            <p class="subtitle">Secure IPv4 Verification & Duplicate Check System</p>
             
             <div class="input-group">
-                <label for="ipInput">Enter IPv4 Address</label>
-                <input type="text" id="ipInput" placeholder="e.g. 192.168.1.1" autocomplete="off" spellcheck="false">
+                <label for="ipInput">IPv4 Address</label>
+                <input type="text" id="ipInput" placeholder="e.g. 192.168.1.50" autocomplete="off" spellcheck="false">
             </div>
 
             <button id="uploadBtn" onclick="checkAndUploadIP()">
