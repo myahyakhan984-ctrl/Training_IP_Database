@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Your Details!</title>
+    <title>IP Registry & Duplicate Checker</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <div class="upload-card">
-            <h2>📍 Upload Your Details!</h2>
+        <div class="card">
+            <div class="icon-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h2>IP Management Portal</h2>
+            <p class="subtitle">Secure IPv4 Verification & Database Registry</p>
             
-            <form id="uploadForm">
-                <input
-                    type="text"
-                    id="ipInput"
-                    class="input-field"
-                    placeholder="Enter IP address (e.g., 8.8.8.8)"
-                    required
-                >
-                <button type="submit" id="uploadBtn" class="btn-upload">
-                    <span class="btn-text">Upload IP</span>
-                    <span class="btn-loader"></span>
-                </button>
-            </form>
+            <div class="input-group">
+                <label for="ipInput">Enter IPv4 Address</label>
+                <input type="text" id="ipInput" placeholder="e.g. 192.168.1.1" autocomplete="off" spellcheck="false">
+            </div>
 
-            <div id="uploadNotification" class="notification"></div>
+            <button id="uploadBtn" onclick="checkAndUploadIP()">
+                <span id="btnText">Upload & Verify IP</span>
+                <span id="loader" class="spinner" style="display: none;"></span>
+            </button>
+
+            <div id="messageBox" class="message-box" style="display: none;"></div>
         </div>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
