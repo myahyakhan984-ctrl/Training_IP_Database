@@ -1,5 +1,18 @@
 let messageTimer = null;
 
+// Page load hone par input field par Enter key event listener lagana
+document.addEventListener("DOMContentLoaded", () => {
+    const ipInput = document.getElementById('ipInput');
+    if (ipInput) {
+        ipInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Default form submit ya refresh roknay ke liye
+                checkAndUploadIP();
+            }
+        });
+    }
+});
+
 async function checkAndUploadIP() {
     const ipInput = document.getElementById('ipInput').value.trim();
     const messageBox = document.getElementById('messageBox');
@@ -48,7 +61,7 @@ async function checkAndUploadIP() {
         }
 
     } catch (error) {
-        showMessage('error', '⚠️ Network connection failed. Please Try Again.');
+        showMessage('error', '⚠️ Network connection failed. Check Worker URL.');
     } finally {
         btnText.style.display = 'inline-block';
         loader.style.display = 'none';
