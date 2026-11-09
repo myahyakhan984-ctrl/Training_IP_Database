@@ -14,7 +14,7 @@ async function checkAndUploadIP() {
     if (!ipv4Regex.test(ipInput)) {
         messageBox.style.display = 'block';
         messageBox.classList.add('error');
-        messageBox.innerText = 'Invalid IP Format! Please enter a valid IPv4 address (e.g. 192.168.1.1)';
+        messageBox.innerText = 'Invalid IP Format! Please enter a valid IPv4 address (e.g. 71.83.161.242)';
         return;
     }
 
