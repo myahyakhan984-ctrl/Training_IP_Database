@@ -25,7 +25,7 @@ async function checkAndUploadIP() {
 
     try {
         // Apne Cloudflare Worker ka URL yahan lagayein
-        const response = await fetch('https://YOUR_WORKER_SUBDOMAIN.workers.dev/api/ip', {
+        const response = await fetch('https://green-tree-f545.myahyakhan984.workers.dev/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
